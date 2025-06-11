@@ -23,7 +23,7 @@
     <header>
         <div class="header-main">
             <div class="header-left">
-                <a class="logo" href="">
+                <a class="logo" href="index.html">
                     <img src="assets/images/ui/logo-black.png" alt="B7Store" />
                 </a>
                 <ul>
@@ -40,6 +40,7 @@
                 </a>
                 <a href="checkout.html" class="btn-icon">
                     <img src="assets/images/ui/shopping-bag-4-line.png" alt="" />
+                    <span class="cart-counter" id="cart-counter">0</span>
                 </a>
                 <a class="btn-icon menu-burger">
                     <img class="off" src="assets/images/ui/menu-line.png" alt="" />
@@ -58,17 +59,17 @@
         </div>
     </header>
     <main>
-        <section class="breadcrumb">Home > Camisetas > Node</section>
+        <section class="breadcrumb">Carregando...</section>
 
         <section class="product">
             <div class="photo-area">
                 <div class="photo">
-                    <img src="assets/images/products/camiseta-html.png" alt="" />
+                    <img src="assets/images/products/default.png" alt="Carregando..." />
                 </div>
             </div>
             <div class="info">
-                <div class="id">CÓD: 0123</div>
-                <div class="name">Camiseta Node JS - Preta</div>
+                <div class="id">CÓD: ...</div>
+                <div class="name">Carregando produto...</div>
                 <div class="size">
                     <div>Selecione o tamanho:</div>
                     <div class="size-buttons">
@@ -78,8 +79,8 @@
                         <div class="btn-icon">GG</div>
                     </div>
                 </div>
-                <div class="price-from">de <span>R$ 89,99</span> por</div>
-                <div class="price-to">R$ 59,99</div>
+                <div class="price-from">de <span>R$ --,--</span> por</div>
+                <div class="price-to">R$ --,--</div>
                 <div class="payments">Forma de pagamento via PIX</div>
                 <div class="buttons">
                     <div class="button" id="add-to-cart-btn">Adicionar à sacola</div>
@@ -107,66 +108,13 @@
                     <img src="assets/images/ui/arrow-left-s-line.png" alt="" />
                 </div>
             </div>
-            <div class="desc-body">....</div>
+            <div class="desc-body">Carregando descrição...</div>
         </section>
 
         <section class="related">
             <div class="related-title">Você também vai gostar.</div>
             <div class="related-grid">
-
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-
+                <!-- Produtos relacionados serão carregados dinamicamente -->
             </div>
         </section>
 
@@ -188,7 +136,7 @@
     </section>
     <footer>
         <div class="footer-menu">
-            <a class="logo" href="">
+            <a class="logo" href="index.html">
                 <img src="assets/images/ui/logo-white.png" alt="B7Store" />
             </a>
             <ul>
@@ -244,54 +192,13 @@
     </footer>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script type="text/javascript" src="assets/js/supabase.js"></script>
-    <script type="text/javascript" src="assets/js/header.js"></script>
-    <script type="text/javascript" src="assets/js/footer.js"></script>
-    <script type="text/javascript" src="assets/js/auth.js"></script>
-    <script type="text/javascript" src="assets/js/cart.js"></script>
-    <script type="text/javascript" src="assets/js/product.js"></script>
-    <script>
-        // Dados do produto atual (normalmente viriam do banco de dados)
-        const currentProduct = {
-            id: 'camiseta-node-preta',
-            name: 'Camiseta Node JS - Preta',
-            price: 59.99,
-            image_url: 'assets/images/products/camiseta-html.png'
-        };
-
-        // Adicionar evento ao botão de adicionar ao carrinho
-        document.addEventListener('DOMContentLoaded', function() {
-            const addToCartBtn = document.getElementById('add-to-cart-btn');
-            if (addToCartBtn) {
-                addToCartBtn.addEventListener('click', async function() {
-                    // Verificar se o carrinho está disponível
-                    if (typeof cart === 'undefined') {
-                        alert('Erro: Sistema de carrinho não disponível');
-                        return;
-                    }
-
-                    // Desabilitar botão temporariamente
-                    addToCartBtn.style.opacity = '0.6';
-                    addToCartBtn.style.pointerEvents = 'none';
-                    addToCartBtn.textContent = 'Adicionando...';
-
-                    // Adicionar produto ao carrinho
-                    const success = await cart.addItem(currentProduct);
-
-                    // Restaurar botão
-                    setTimeout(() => {
-                        addToCartBtn.style.opacity = '1';
-                        addToCartBtn.style.pointerEvents = 'auto';
-                        addToCartBtn.textContent = 'Adicionar à sacola';
-                    }, 1000);
-
-                    if (!success) {
-                        alert('Erro ao adicionar produto ao carrinho');
-                    }
-                });
-            }
-        });
-    </script>
+    <script src="assets/js/supabase.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script src="assets/js/header.js"></script>
+    <script src="assets/js/footer.js"></script>
+    <script src="assets/js/product.js"></script>
 </body>
 
 </html>
+
