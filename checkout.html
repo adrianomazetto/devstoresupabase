@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho - B7Store</title>
+    <link rel="stylesheet" href="assets/css/global.css" />
+    <link rel="stylesheet" href="assets/css/header.css" />
+    <link rel="stylesheet" href="assets/css/newsletter.css" />
+    <link rel="stylesheet" href="assets/css/footer.css" />
+    <link rel="stylesheet" href="assets/css/checkout.css" />
+    <style>
+        .checkout-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            gap: 15px;
+        }
+
+        .item-image img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-details h4 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
+
+        .item-price {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .qty-value {
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .item-total {
+            font-weight: bold;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .remove-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .empty-cart h3 {
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .empty-cart p {
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128c7e;
+        }
+
+        .whatsapp-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="header-warning">
+        <div class="mobile"><span>FRETE GRÁTIS</span> para todo o Nordeste!</div>
+        <div class="desktop"><span>FRETE GRÁTIS</span> para todo o Nordeste nas compras acima de R$ 199,00.
+            <span>APROVEITA!</span>
+        </div>
+    </section>
+    <header>
+        <div class="header-main">
+            <div class="header-left">
+                <a class="logo" href="index.html">
+                    <img src="assets/images/ui/logo-black.png" alt="B7Store" />
+                </a>
+                <ul>
+                    <li><a href="produtos.html">Camisetas</a></li>
+                    <li><a href="produtos.html">Kits B7Web</a></li>
+                    <li><a href="produtos.html">Acessórios</a></li>
+                    <li><a href="produtos.html">Eletrônicos</a></li>
+                </ul>
+            </div>
+            <div class="header-right">
+                <input class="search" type="text" placeholder="Pesquisa" />
+                <a href="login.html" class="btn-icon">
+                    <img src="assets/images/ui/user-line.png" alt="" />
+                </a>
+                <a href="checkout.html" class="btn-icon">
+                    <img src="assets/images/ui/shopping-bag-4-line.png" alt="" />
+                </a>
+                <a class="btn-icon menu-burger">
+                    <img class="off" src="assets/images/ui/menu-line.png" alt="" />
+                    <img class="on" src="assets/images/ui/menu-line-white.png" alt="" />
+                </a>
+            </div>
+        </div>
+        <div class="header-menu">
+            <a href="produtos.html">Camisetas</a>
+            <a href="produtos.html">Kits B7Web</a>
+            <a href="produtos.html">Acessórios</a>
+            <a href="produtos.html">Eletrônicos</a>
+        </div>
+        <div class="header-search">
+            <input class="search" type="text" placeholder="O que você procura?" />
+        </div>
+    </header>
+    <main>
+
+        <section class="checkout-header">
+            <img src="assets/images/ui/shopping-bag-4-line.png" alt="" />
+            <div>Sua sacola de compras <span id="cart-count">( 0 itens )</span></div>
+        </section>
+
+        <section class="checkout">
+            <div class="products">
+                <div class="products-area">
+                    <div class="product-header">
+                        <div>Produto</div>
+                        <div>Preço</div>
+                    </div>
+                    
+                    <div id="checkout-items">
+                        <!-- Itens do carrinho serão inseridos aqui via JavaScript -->
+                    </div>
+                </div>
+            </div>
+            <div class="info">
+
+                <div class="shipping">
+                    <div>Calcular frete e prazo</div>
+                    <div class="shipping-area">
+                        <input class="input" type="text" placeholder="Digite o CEP" />
+                        <div class="button">Calcular</div>
+                    </div>
+                </div>
+
+                <div class="shipping-result" style="display: none;">
+                    <div class="shipping-address">Rua das Flores - Jardins da Serra - Campos</div>
+                    <div class="shipping-price-area">
+                        <div class="shipping-price-text">Receba em até 7 dias úteis</div>
+                        <div class="shipping-price-number">R$73,23</div>
+                    </div>
+                </div>
+
+                <div class="subtotal">
+                    <div class="area">
+                        <div class="left">Subtotal</div>
+                        <div class="right" id="checkout-total">R$ 0,00</div>
+                    </div>
+                    <div class="area divisor">
+                        <div class="left">Frete</div>
+                        <div class="right">--</div>
+                    </div>
+                    <div class="area">
+                        <div class="left">Total</div>
+                        <div class="right">
+                            <div class="bigtotal" id="checkout-final-total">R$ 0,00</div>
+                        </div>
+                    </div>
+                    <div class="payment">Forma de pagamento via PIX</div>
+                    <button class="whatsapp-btn" id="whatsapp-btn" onclick="sendWhatsAppOrder()">
+                        📱 Finalizar Pedido via WhatsApp
+                    </button>
+                    <a class="other-products" href="produtos.html">Comprar outros produtos</a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+    <section class="newsletter">
+        <div class="news-area">
+            <div class="news-left">
+                <img src="assets/images/ui/mail-send-line.png" alt="" />
+                <div>
+                    <h3>Fique por dentro das promoções!</h3>
+                    <p>Coloque seu e-mail e seja o primeiro a saber</p>
+                </div>
+            </div>
+            <div class="news-right">
+                <input class="input" type="text" placeholder="Qual seu e-mail?" />
+                <button class="button">Enviar</button>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="footer-menu">
+            <a class="logo" href="index.html">
+                <img src="assets/images/ui/logo-white.png" alt="B7Store" />
+            </a>
+            <ul>
+                <li><a href="produtos.html">Camisetas</a></li>
+                <li><a href="produtos.html">Kits B7Web</a></li>
+                <li><a href="produtos.html">Acessórios</a></li>
+                <li><a href="produtos.html">Eletrônicos</a></li>
+            </ul>
+        </div>
+        <div class="footer-contacts">
+            <div class="contacts">
+                <div class="footer-title">Precisa de ajuda?</div>
+                <div class="footer-icons">
+                    <a class="btn-icon-text" href="">
+                        <img src="assets/images/ui/mail-line.png" alt="" />
+                        <span>b7store@email.com</span>
+                    </a>
+                    <a class="btn-icon-text" href="">
+                        <img src="assets/images/ui/phone-line.png" alt="" />
+                        <span>(00) 00000-0000</span>
+                    </a>
+                </div>
+            </div>
+            <div class="social">
+                <div class="footer-title">Acompanhe nas redes sociais</div>
+                <div class="footer-icons">
+
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/instagram-line.png" alt="" />
+                    </a>
+
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/linkedin-line.png" alt="" />
+                    </a>
+
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/facebook-line.png" alt="" />
+                    </a>
+
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/twitter-x-fill.png" alt="" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="phrase">Se você leu isso aqui, saiba que está no caminho certo!<br />Continue estudando e você
+                chegará lá...</div>
+            <div class="btn-icon">
+                <img src="assets/images/ui/arrow-up-line.png" alt="" />
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script type="text/javascript" src="assets/js/supabase.js"></script>
+    <script type="text/javascript" src="assets/js/header.js"></script>
+    <script type="text/javascript" src="assets/js/footer.js"></script>
+    <script type="text/javascript" src="assets/js/auth.js"></script>
+    <script type="text/javascript" src="assets/js/cart.js"></script>
+    <script>
+        // Função para enviar pedido via WhatsApp
+        function sendWhatsAppOrder() {
+            if (cart.items.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+
+            let message = '🛒 *Novo Pedido - B7Store*\n\n';
+            
+            cart.items.forEach(item => {
+                message += `• ${item.name}\n`;
+                message += `  Quantidade: ${item.quantity}\n`;
+                message += `  Preço unitário: R$ ${parseFloat(item.price).toFixed(2).replace('.', ',')}\n`;
+                message += `  Subtotal: R$ ${(parseFloat(item.price) * item.quantity).toFixed(2).replace('.', ',')}\n\n`;
+            });
+
+            message += `💰 *Total: R$ ${cart.getTotal().toFixed(2).replace('.', ',')}*\n\n`;
+            message += '📱 Gostaria de finalizar este pedido!';
+
+            // Número do WhatsApp da loja (substitua pelo número real)
+            const phoneNumber = '5511999999999'; // Formato: código do país + DDD + número
+            
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Atualizar UI quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Aguardar o carrinho estar pronto
+            const checkCart = setInterval(() => {
+                if (typeof cart !== 'undefined' && cart.items !== undefined) {
+                    clearInterval(checkCart);
+                    cart.updateCartUI();
+                    
+                    // Atualizar contador no header
+                    const cartCount = document.getElementById('cart-count');
+                    if (cartCount) {
+                        const count = cart.getItemCount();
+                        cartCount.textContent = `( ${count} ${count === 1 ? 'item' : 'itens'} )`;
+                    }
+
+                    // Atualizar total final
+                    const finalTotal = document.getElementById('checkout-final-total');
+                    if (finalTotal) {
+                        finalTotal.textContent = `R$ ${cart.getTotal().toFixed(2).replace('.', ',')}`;
+                    }
+
+                    // Habilitar/desabilitar botão do WhatsApp
+                    const whatsappBtn = document.getElementById('whatsapp-btn');
+                    if (whatsappBtn) {
+                        whatsappBtn.disabled = cart.items.length === 0;
+                    }
+                }
+            }, 100);
+        });
+    </script>
+    <script type="text/javascript" src="assets/js/whatsapp.js"></script>
+</body>
+
+</html>
+

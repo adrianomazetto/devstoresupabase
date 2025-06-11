@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração - B7Store</title>
+    <link rel="stylesheet" href="assets/css/global.css" />
+    <link rel="stylesheet" href="assets/css/header.css" />
+    <link rel="stylesheet" href="assets/css/footer.css" />
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .admin-header h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .products-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .products-table {
+                font-size: 14px;
+            }
+
+            .products-table th,
+            .products-table td {
+                padding: 10px 5px;
+            }
+
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-main">
+            <div class="header-left">
+                <a class="logo" href="index.html">
+                    <img src="assets/images/ui/logo-black.png" alt="B7Store" />
+                </a>
+                <ul>
+                    <li><a href="produtos.html">Camisetas</a></li>
+                    <li><a href="produtos.html">Kits B7Web</a></li>
+                    <li><a href="produtos.html">Acessórios</a></li>
+                    <li><a href="produtos.html">Eletrônicos</a></li>
+                </ul>
+            </div>
+            <div class="header-right">
+                <input class="search" type="text" placeholder="Pesquisa" />
+                <a href="login.html" class="btn-icon">
+                    <img src="assets/images/ui/user-line.png" alt="" />
+                </a>
+                <a href="checkout.html" class="btn-icon">
+                    <img src="assets/images/ui/shopping-bag-4-line.png" alt="" />
+                </a>
+                <a class="btn-icon menu-burger">
+                    <img class="off" src="assets/images/ui/menu-line.png" alt="" />
+                    <img class="on" src="assets/images/ui/menu-line-white.png" alt="" />
+                </a>
+            </div>
+        </div>
+        <div class="header-menu">
+            <a href="produtos.html">Camisetas</a>
+            <a href="produtos.html">Kits B7Web</a>
+            <a href="produtos.html">Acessórios</a>
+            <a href="produtos.html">Eletrônicos</a>
+        </div>
+        <div class="header-search">
+            <input class="search" type="text" placeholder="O que você procura?" />
+        </div>
+    </header>
+
+    <main>
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>Administração de Produtos</h1>
+                <button class="btn-primary" onclick="openProductModal()">Adicionar Produto</button>
+            </div>
+
+            <div id="message-container"></div>
+
+            <div id="products-container">
+                <div class="loading">Carregando produtos...</div>
+            </div>
+        </div>
+
+        <!-- Modal para adicionar/editar produto -->
+        <div id="productModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-title">Adicionar Produto</h2>
+                    <span class="close" onclick="closeProductModal()">&times;</span>
+                </div>
+                <form id="productForm">
+                    <input type="hidden" id="product-id" />
+                    
+                    <div class="form-group">
+                        <label for="product-name">Nome do Produto:</label>
+                        <input type="text" id="product-name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-description">Descrição:</label>
+                        <textarea id="product-description" name="description"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-price">Preço (R$):</label>
+                        <input type="number" id="product-price" name="price" step="0.01" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-image">URL da Imagem:</label>
+                        <input type="url" id="product-image" name="image_url" placeholder="https://exemplo.com/imagem.jpg">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-category">Categoria:</label>
+                        <select id="product-category" name="category">
+                            <option value="camisetas">Camisetas</option>
+                            <option value="kits">Kits B7Web</option>
+                            <option value="acessorios">Acessórios</option>
+                            <option value="eletronicos">Eletrônicos</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeProductModal()">Cancelar</button>
+                        <button type="submit" class="btn-primary" id="save-btn">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-menu">
+            <a class="logo" href="index.html">
+                <img src="assets/images/ui/logo-white.png" alt="B7Store" />
+            </a>
+            <ul>
+                <li><a href="produtos.html">Camisetas</a></li>
+                <li><a href="produtos.html">Kits B7Web</a></li>
+                <li><a href="produtos.html">Acessórios</a></li>
+                <li><a href="produtos.html">Eletrônicos</a></li>
+            </ul>
+        </div>
+        <div class="footer-contacts">
+            <div class="contacts">
+                <div class="footer-title">Precisa de ajuda?</div>
+                <div class="footer-icons">
+                    <a class="btn-icon-text" href="">
+                        <img src="assets/images/ui/mail-line.png" alt="" />
+                        <span>b7store@email.com</span>
+                    </a>
+                    <a class="btn-icon-text" href="">
+                        <img src="assets/images/ui/phone-line.png" alt="" />
+                        <span>(00) 00000-0000</span>
+                    </a>
+                </div>
+            </div>
+            <div class="social">
+                <div class="footer-title">Acompanhe nas redes sociais</div>
+                <div class="footer-icons">
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/instagram-line.png" alt="" />
+                    </a>
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/linkedin-line.png" alt="" />
+                    </a>
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/facebook-line.png" alt="" />
+                    </a>
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/twitter-x-fill.png" alt="" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="phrase">Se você leu isso aqui, saiba que está no caminho certo!<br />Continue estudando e você
+                chegará lá...</div>
+            <div class="btn-icon">
+                <img src="assets/images/ui/arrow-up-line.png" alt="" />
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script type="text/javascript" src="assets/js/supabase.js"></script>
+    <script type="text/javascript" src="assets/js/header.js"></script>
+    <script type="text/javascript" src="assets/js/footer.js"></script>
+    <script type="text/javascript" src="assets/js/auth.js"></script>
+    <script type="text/javascript" src="assets/js/cart.js"></script>
+    <script type="text/javascript" src="assets/js/admin.js"></script>
+</body>
+
+</html>
+
