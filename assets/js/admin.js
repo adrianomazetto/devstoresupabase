@@ -7,6 +7,10 @@ class ProductAdmin {
     }
 
     async init() {
+        console.log("ProductAdmin init() called");
+        console.log("auth.isLoggedIn():", auth.isLoggedIn());
+        console.log("auth.currentUser:", auth.currentUser);
+        
         // Verificar se o usuário está logado
         if (!auth.isLoggedIn()) {
             this.showMessage('Você precisa estar logado para acessar a administração.', 'error');
