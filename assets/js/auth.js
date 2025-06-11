@@ -2,27 +2,42 @@
 class Auth {
     constructor() {
         this.currentUser = null;
+        this.initPromise = null; // Adicionar uma Promise para a inicialização
         this.init();
     }
 
     async init() {
-        // Verificar se há um usuário logado
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (user) {
-            this.currentUser = user;
-            this.updateUI();
+        if (this.initPromise) {
+            return this.initPromise;
         }
 
-        // Escutar mudanças no estado de autenticação
-        supabaseClient.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN') {
-                this.currentUser = session.user;
-                this.updateUI();
-            } else if (event === 'SIGNED_OUT') {
-                this.currentUser = null;
+        this.initPromise = new Promise(async (resolve) => {
+            // Verificar se há um usuário logado
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (user) {
+                this.currentUser = user;
                 this.updateUI();
             }
+
+            // Escutar mudanças no estado de autenticação
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+                if (event === 'SIGNED_IN') {
+                    this.currentUser = session.user;
+                    this.updateUI();
+                } else if (event === 'SIGNED_OUT') {
+                    this.currentUser = null;
+                    this.updateUI();
+                }
+                // Resolver a promise quando o estado inicial for definido
+                resolve();
+            });
+
+            // Se não houver mudança de estado (ex: página carregada sem login), resolver imediatamente
+            if (!user && !supabaseClient.auth.session()) { // Verifica se não há usuário e nenhuma sessão ativa
+                resolve();
+            }
         });
+        return this.initPromise;
     }
 
     async login(email, password) {

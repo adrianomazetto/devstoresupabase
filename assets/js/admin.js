@@ -262,6 +262,13 @@ class ProductAdmin {
     }
 }
 
+// Inicializar quando a página carregar
+document.addEventListener('DOMContentLoaded', async function() {
+    // Aguardar o auth estar pronto
+    await auth.init(); // Aguardar a Promise de inicialização do auth
+    productAdmin = new ProductAdmin();
+});
+
 // Funções globais para os botões
 function openProductModal() {
     productAdmin.openProductModal();
