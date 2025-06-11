@@ -57,8 +57,15 @@ async function loadProducts() {
 }
 
 function renderProducts(products) {
-    const productsAreaMostViewed = document.querySelector(".product-list:nth-of-type(1) .products-area");
-    const productsAreaBestSellers = document.querySelector(".product-list:nth-of-type(2) .products-area");
+    const productLists = document.querySelectorAll(".product-list .products-area");
+    
+    if (productLists.length < 2) {
+        console.error("Não foi possível encontrar as seções de produtos");
+        return;
+    }
+
+    const productsAreaMostViewed = productLists[0];
+    const productsAreaBestSellers = productLists[1];
 
     productsAreaMostViewed.innerHTML = "";
     productsAreaBestSellers.innerHTML = "";
@@ -94,9 +101,10 @@ function renderProducts(products) {
             </div>
         `;
         productsAreaMostViewed.innerHTML += productItem;
-        productsAreaBestSellers.innerHTML += productItem; // Para fins de demonstração, ambos mostram os mesmos produtos
+        productsAreaBestSellers.innerHTML += productItem;
     });
 }
+
 
 // Inicializar carregamento de produtos quando a página carregar
 document.addEventListener("DOMContentLoaded", loadProducts);
