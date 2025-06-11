@@ -10,7 +10,7 @@ class ProductAdmin {
         console.log("ProductAdmin init() called");
         console.log("auth.isLoggedIn():", auth.isLoggedIn());
         console.log("auth.currentUser:", auth.currentUser);
-        
+
         // Verificar se o usuário está logado
         if (!auth.isLoggedIn()) {
             this.showMessage('Você precisa estar logado para acessar a administração.', 'error');
@@ -286,14 +286,9 @@ function closeProductModal() {
 let productAdmin;
 
 // Inicializar quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
-    // Aguardar o auth estar pronto
-    const checkAuth = setInterval(() => {
-        if (typeof auth !== 'undefined' && auth.currentUser !== undefined) {
-            clearInterval(checkAuth);
-            productAdmin = new ProductAdmin();
-        }
-    }, 100);
+document.addEventListener("DOMContentLoaded", async function() {
+    await auth.loadUser(); // Aguardar o carregamento do usuário
+    productAdmin = new ProductAdmin();
 });
 
 // Fechar modal ao clicar fora dele

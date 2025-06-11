@@ -2,34 +2,26 @@
 class Auth {
     constructor() {
         this.currentUser = null;
-        this.initPromise = null;
-        this.init();
+        this.loadUser(); // Chamar loadUser no construtor
+        this.setupAuthStateChange(); // Configurar o listener de mudança de estado
     }
 
-    async init() {
-        if (this.initPromise) {
-            return this.initPromise;
-        }
+    async loadUser() {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        this.currentUser = user;
+        this.updateUI();
+    }
 
-        this.initPromise = new Promise(async (resolve) => {
-            // Escutar mudanças no estado de autenticação
-            const { data: { subscription } } = supabaseClient.auth.onAuthStateChange((event, session) => {
-                if (event === 'SIGNED_IN') {
-                    this.currentUser = session.user;
-                    this.updateUI();
-                } else if (event === 'SIGNED_OUT') {
-                    this.currentUser = null;
-                    this.updateUI();
-                }
-                // Resolver a promise na primeira vez que o evento for disparado
-                // Isso garante que o estado inicial foi processado
-                if (subscription) { // Verifica se a subscription existe para evitar chamadas múltiplas
-                    subscription.unsubscribe(); // Desinscreve após o primeiro evento para evitar chamadas futuras
-                }
-                resolve();
-            });
+    setupAuthStateChange() {
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN') {
+                this.currentUser = session.user;
+                this.updateUI();
+            } else if (event === 'SIGNED_OUT') {
+                this.currentUser = null;
+                this.updateUI();
+            }
         });
-        return this.initPromise;
     }
 
     async login(email, password) {
