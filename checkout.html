@@ -221,7 +221,7 @@
                         </div>
                     </div>
                     <div class="payment">Forma de pagamento via PIX</div>
-                    <button class="whatsapp-btn" id="whatsapp-btn" onclick="sendWhatsAppOrder()">
+                    <button class="whatsapp-btn" id="whatsapp-btn" onclick="cart.sendWhatsAppOrder()">
                         📱 Finalizar Pedido via WhatsApp
                     </button>
                     <a class="other-products" href="produtos.html">Comprar outros produtos</a>
@@ -309,63 +309,6 @@
     <script type="text/javascript" src="assets/js/footer.js"></script>
     <script type="text/javascript" src="assets/js/auth.js"></script>
     <script type="text/javascript" src="assets/js/cart.js"></script>
-    <script>
-        // Função para enviar pedido via WhatsApp
-        function sendWhatsAppOrder() {
-            if (cart.items.length === 0) {
-                alert('Seu carrinho está vazio!');
-                return;
-            }
-
-            let message = '🛒 *Novo Pedido - B7Store*\n\n';
-            
-            cart.items.forEach(item => {
-                message += `• ${item.name}\n`;
-                message += `  Quantidade: ${item.quantity}\n`;
-                message += `  Preço unitário: R$ ${parseFloat(item.price).toFixed(2).replace('.', ',')}\n`;
-                message += `  Subtotal: R$ ${(parseFloat(item.price) * item.quantity).toFixed(2).replace('.', ',')}\n\n`;
-            });
-
-            message += `💰 *Total: R$ ${cart.getTotal().toFixed(2).replace('.', ',')}*\n\n`;
-            message += '📱 Gostaria de finalizar este pedido!';
-
-            // Número do WhatsApp da loja (substitua pelo número real)
-            const phoneNumber = '5511999999999'; // Formato: código do país + DDD + número
-            
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // Atualizar UI quando a página carregar
-        document.addEventListener('DOMContentLoaded', function() {
-            // Aguardar o carrinho estar pronto
-            const checkCart = setInterval(() => {
-                if (typeof cart !== 'undefined' && cart.items !== undefined) {
-                    clearInterval(checkCart);
-                    cart.updateCartUI();
-                    
-                    // Atualizar contador no header
-                    const cartCount = document.getElementById('cart-count');
-                    if (cartCount) {
-                        const count = cart.getItemCount();
-                        cartCount.textContent = `( ${count} ${count === 1 ? 'item' : 'itens'} )`;
-                    }
-
-                    // Atualizar total final
-                    const finalTotal = document.getElementById('checkout-final-total');
-                    if (finalTotal) {
-                        finalTotal.textContent = `R$ ${cart.getTotal().toFixed(2).replace('.', ',')}`;
-                    }
-
-                    // Habilitar/desabilitar botão do WhatsApp
-                    const whatsappBtn = document.getElementById('whatsapp-btn');
-                    if (whatsappBtn) {
-                        whatsappBtn.disabled = cart.items.length === 0;
-                    }
-                }
-            }, 100);
-        });
-    </script>
     <script type="text/javascript" src="assets/js/whatsapp.js"></script>
 </body>
 
