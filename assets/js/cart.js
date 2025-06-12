@@ -249,57 +249,102 @@ class Cart {
         }
     }
 
+    // updateCheckoutPage() {
+    //     const checkoutContainer = document.getElementById('checkout-items');
+    //     const checkoutTotal = document.getElementById('checkout-total');
+    //     const cartTitle = document.querySelector('.checkout-title');
+
+    //     if (checkoutContainer) {
+    //         if (this.items.length === 0) {
+    //             checkoutContainer.innerHTML = '<p>Seu carrinho está vazio.</p>';
+    //             if (checkoutTotal) checkoutTotal.textContent = 'R$ 0,00';
+    //             if (cartTitle) cartTitle.textContent = `Sua sacola de compras ( 0 itens )`;
+    //             return;
+    //         }
+
+    //         // Atualizar título do carrinho
+    //         if (cartTitle) {
+    //             cartTitle.textContent = `Sua sacola de compras ( ${this.getItemCount()} itens )`;
+    //         }
+
+    //         let html = '';
+    //         this.items.forEach(item => {
+    //             html += `
+    //                 <div class="checkout-item" data-product-id="${item.productId}">
+    //                     <div class="item-image">
+    //                         <img src="${item.image || 'assets/images/products/default.png'}" alt="${item.name}" />
+    //                     </div>
+    //                     <div class="item-details">
+    //                         <h4>${item.name}</h4>
+    //                         <p class="item-price">R$ ${parseFloat(item.price).toFixed(2).replace('.', ',')}</p>
+    //                     </div>
+    //                     <div class="item-quantity">
+    //                         <button class="qty-btn" onclick="cart.updateQuantity('${item.productId}', ${item.quantity - 1})">-</button>
+    //                         <span class="qty-value">${item.quantity}</span>
+    //                         <button class="qty-btn" onclick="cart.updateQuantity('${item.productId}', ${item.quantity + 1})">+</button>
+    //                     </div>
+    //                     <div class="item-total">
+    //                         R$ ${(parseFloat(item.price) * item.quantity).toFixed(2).replace('.', ',')}
+    //                     </div>
+    //                     <button class="remove-btn" onclick="cart.removeItem('${item.productId}')">
+    //                         <img src="assets/images/ui/trash.png" alt="Remover" />
+    //                     </button>
+    //                 </div>
+    //             `;
+    //         });
+
+    //         checkoutContainer.innerHTML = html;
+
+    //         if (checkoutTotal) {
+    //             checkoutTotal.textContent = `R$ ${this.getTotal().toFixed(2).replace('.', ',')}`;
+    //         }
+    //     }
+    // }
+
     updateCheckoutPage() {
-        const checkoutContainer = document.getElementById('checkout-items');
-        const checkoutTotal = document.getElementById('checkout-total');
-        const cartTitle = document.querySelector('.checkout-title');
+    const checkoutContainer = document.getElementById('checkout-items');
+    const checkoutTotal = document.getElementById('checkout-total');
+    const checkoutFinalTotal = document.getElementById('checkout-final-total');
+    const cartTitle = document.querySelector('.checkout-title');
+    const cartCount = document.getElementById('cart-count');
 
-        if (checkoutContainer) {
-            if (this.items.length === 0) {
-                checkoutContainer.innerHTML = '<p>Seu carrinho está vazio.</p>';
-                if (checkoutTotal) checkoutTotal.textContent = 'R$ 0,00';
-                if (cartTitle) cartTitle.textContent = `Sua sacola de compras ( 0 itens )`;
-                return;
-            }
+    if (checkoutContainer) {
+        if (this.items.length === 0) {
+            checkoutContainer.innerHTML = '<p>Seu carrinho está vazio.</p>';
+            if (checkoutTotal) checkoutTotal.textContent = 'R$ 0,00';
+            if (checkoutFinalTotal) checkoutFinalTotal.textContent = 'R$ 0,00';
+            if (cartTitle) cartTitle.textContent = `Sua sacola de compras ( 0 itens )`;
+            if (cartCount) cartCount.textContent = `( 0 itens )`;
+            return;
+        }
 
-            // Atualizar título do carrinho
-            if (cartTitle) {
-                cartTitle.textContent = `Sua sacola de compras ( ${this.getItemCount()} itens )`;
-            }
+        // Atualizar título do carrinho
+        if (cartTitle) {
+            cartTitle.textContent = `Sua sacola de compras ( ${this.getItemCount()} itens )`;
+        }
+        
+        // Atualizar contador de itens
+        if (cartCount) {
+            cartCount.textContent = `( ${this.getItemCount()} itens )`;
+        }
 
-            let html = '';
-            this.items.forEach(item => {
-                html += `
-                    <div class="checkout-item" data-product-id="${item.productId}">
-                        <div class="item-image">
-                            <img src="${item.image || 'assets/images/products/default.png'}" alt="${item.name}" />
-                        </div>
-                        <div class="item-details">
-                            <h4>${item.name}</h4>
-                            <p class="item-price">R$ ${parseFloat(item.price).toFixed(2).replace('.', ',')}</p>
-                        </div>
-                        <div class="item-quantity">
-                            <button class="qty-btn" onclick="cart.updateQuantity('${item.productId}', ${item.quantity - 1})">-</button>
-                            <span class="qty-value">${item.quantity}</span>
-                            <button class="qty-btn" onclick="cart.updateQuantity('${item.productId}', ${item.quantity + 1})">+</button>
-                        </div>
-                        <div class="item-total">
-                            R$ ${(parseFloat(item.price) * item.quantity).toFixed(2).replace('.', ',')}
-                        </div>
-                        <button class="remove-btn" onclick="cart.removeItem('${item.productId}')">
-                            <img src="assets/images/ui/trash.png" alt="Remover" />
-                        </button>
-                    </div>
-                `;
-            });
+        // ... código para renderizar os itens do carrinho ...
 
-            checkoutContainer.innerHTML = html;
-
-            if (checkoutTotal) {
-                checkoutTotal.textContent = `R$ ${this.getTotal().toFixed(2).replace('.', ',')}`;
-            }
+        // Formatar o total com parseFloat para garantir que seja tratado como número
+        const totalFormatted = `R$ ${this.getTotal().toFixed(2).replace('.', ',')}`;
+        
+        // Atualizar ambos os elementos de total
+        if (checkoutTotal) {
+            checkoutTotal.textContent = totalFormatted;
+        }
+        
+        // Atualizar o total final também
+        if (checkoutFinalTotal) {
+            checkoutFinalTotal.textContent = totalFormatted;
         }
     }
+}
+
 
     showAddToCartMessage(productName) {
         // Remover mensagem existente se houver
