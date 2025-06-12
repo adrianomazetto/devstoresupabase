@@ -1,7 +1,7 @@
 // Integração com WhatsApp para pedidos
 class WhatsAppIntegration {
     constructor() {
-        this.phoneNumber = '5511999999999'; // Número do WhatsApp da loja (substitua pelo seu)
+        this.phoneNumber = '5515981693581'; // Número do WhatsApp da loja (substitua pelo seu)
         this.init();
     }
 
