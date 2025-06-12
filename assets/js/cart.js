@@ -354,6 +354,36 @@ class Cart {
     async addProduct(product) {
         return await this.addItem(product);
     }
+    
+    sendWhatsAppOrder() {
+        try {
+            if (this.items.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+
+            let message = '🛒 *Novo Pedido - B7Store*\n\n';
+            
+            this.items.forEach(item => {
+                message += `• ${item.name}\n`;
+                message += `  Quantidade: ${item.quantity}\n`;
+                message += `  Preço unitário: R$ ${parseFloat(item.price).toFixed(2).replace('.', ',')}\n`;
+                message += `  Subtotal: R$ ${(parseFloat(item.price) * item.quantity).toFixed(2).replace('.', ',')}\n\n`;
+            });
+
+            message += `💰 *Total: R$ ${this.getTotal().toFixed(2).replace('.', ',')}*\n\n`;
+            message += '📱 Gostaria de finalizar este pedido!';
+
+            // Número do WhatsApp da loja (substitua pelo número real)
+            const phoneNumber = '5515981693581'; // Formato: código do país + DDD + número
+            
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        } catch (error) {
+            console.error('Erro ao enviar pedido via WhatsApp:', error);
+            alert('Erro ao processar pedido. Tente novamente.');
+        }
+    }
 }
 
 // Inicializar carrinho quando a página carregar
