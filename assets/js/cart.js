@@ -360,7 +360,7 @@ class Cart {
             message += '📱 Gostaria de finalizar este pedido!';
 
             // Número do WhatsApp da loja (substitua pelo número real)
-            const phoneNumber = '5511999999999'; // Formato: código do país + DDD + número
+            const phoneNumber = '5515918693581'; // Formato: código do país + DDD + número
             
             const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message )}`;
             window.open(whatsappUrl, '_blank');
