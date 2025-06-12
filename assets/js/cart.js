@@ -7,7 +7,7 @@ class Cart {
 
     async init() {
         // Carregar itens do carrinho do Supabase se o usuário estiver logado
-        if (auth.isLoggedIn()) {
+        if (auth && auth.isLoggedIn()) {
             await this.loadCartFromDatabase();
         } else {
             // Carregar do localStorage se não estiver logado
@@ -53,7 +53,12 @@ class Cart {
     loadCartFromLocalStorage() {
         const savedCart = localStorage.getItem('b7store_cart');
         if (savedCart) {
-            this.items = JSON.parse(savedCart);
+            try {
+                this.items = JSON.parse(savedCart);
+            } catch (error) {
+                console.error('Erro ao carregar carrinho do localStorage:', error);
+                this.items = [];
+            }
         }
     }
 
@@ -63,7 +68,7 @@ class Cart {
 
     async addItem(product) {
         const existingItem = this.items.find(item => item.productId === product.id);
-
+        
         if (existingItem) {
             // Se o produto já existe, aumenta a quantidade
             await this.updateQuantity(product.id, existingItem.quantity + 1);
@@ -77,7 +82,7 @@ class Cart {
                 quantity: 1
             };
 
-            if (auth.isLoggedIn()) {
+            if (auth && auth.isLoggedIn()) {
                 // Salvar no banco de dados
                 try {
                     const { data, error } = await supabaseClient
@@ -112,12 +117,11 @@ class Cart {
 
     async removeItem(productId) {
         const itemIndex = this.items.findIndex(item => item.productId === productId);
-        
         if (itemIndex === -1) return false;
 
         const item = this.items[itemIndex];
 
-        if (auth.isLoggedIn() && item.cartId) {
+        if (auth && auth.isLoggedIn() && item.cartId) {
             // Remover do banco de dados
             try {
                 const { error } = await supabaseClient
@@ -148,7 +152,7 @@ class Cart {
         const item = this.items.find(item => item.productId === productId);
         if (!item) return false;
 
-        if (auth.isLoggedIn() && item.cartId) {
+        if (auth && auth.isLoggedIn() && item.cartId) {
             // Atualizar no banco de dados
             try {
                 const { error } = await supabaseClient
@@ -172,7 +176,7 @@ class Cart {
     }
 
     async clearCart() {
-        if (auth.isLoggedIn()) {
+        if (auth && auth.isLoggedIn()) {
             // Limpar do banco de dados
             try {
                 const { error } = await supabaseClient
@@ -208,13 +212,12 @@ class Cart {
     updateCartUI() {
         // Atualizar contador no header
         this.updateCartCounter();
-        
         // Atualizar página de checkout se estiver aberta
         this.updateCheckoutPage();
     }
 
     updateCartCounter() {
-        const cartIcon = document.querySelector('a[href="checkout.html"]');
+        const cartIcon = document.querySelector('a[href="checkout.html"], a[href="checkout"]');
         if (cartIcon) {
             const count = this.getItemCount();
             
@@ -244,7 +247,6 @@ class Cart {
                     justify-content: center;
                     font-weight: bold;
                 `;
-                
                 cartIcon.style.position = 'relative';
                 cartIcon.appendChild(counter);
             }
@@ -254,12 +256,19 @@ class Cart {
     updateCheckoutPage() {
         const checkoutContainer = document.getElementById('checkout-items');
         const checkoutTotal = document.getElementById('checkout-total');
-        
+        const cartTitle = document.querySelector('.checkout-title');
+
         if (checkoutContainer) {
             if (this.items.length === 0) {
                 checkoutContainer.innerHTML = '<p>Seu carrinho está vazio.</p>';
                 if (checkoutTotal) checkoutTotal.textContent = 'R$ 0,00';
+                if (cartTitle) cartTitle.textContent = `Sua sacola de compras ( 0 itens )`;
                 return;
+            }
+
+            // Atualizar título do carrinho
+            if (cartTitle) {
+                cartTitle.textContent = `Sua sacola de compras ( ${this.getItemCount()} itens )`;
             }
 
             let html = '';
@@ -289,7 +298,7 @@ class Cart {
             });
 
             checkoutContainer.innerHTML = html;
-            
+
             if (checkoutTotal) {
                 checkoutTotal.textContent = `R$ ${this.getTotal().toFixed(2).replace('.', ',')}`;
             }
@@ -297,85 +306,52 @@ class Cart {
     }
 
     showAddToCartMessage(productName) {
-        // Criar e mostrar mensagem de sucesso
+        // Remover mensagem existente se houver
+        const existingMessage = document.querySelector('.cart-message');
+        if (existingMessage) {
+            existingMessage.remove();
+        }
+
+        // Criar nova mensagem
         const message = document.createElement('div');
         message.className = 'cart-message';
-        message.innerHTML = `
-            <div style="
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #28a745;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 5px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-                z-index: 10000;
-                animation: slideIn 0.3s ease-out;
-            ">
-                <strong>${productName}</strong> foi adicionado ao carrinho!
-            </div>
+        message.textContent = 'Produto adicionado ao carrinho!';
+        message.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         `;
 
         document.body.appendChild(message);
 
         // Remover mensagem após 3 segundos
         setTimeout(() => {
-            message.remove();
+            if (message.parentNode) {
+                message.parentNode.removeChild(message);
+            }
         }, 3000);
     }
 
-    // Migrar carrinho do localStorage para o banco quando o usuário fizer login
-    async migrateLocalCartToDatabase() {
-        if (!auth.isLoggedIn() || this.items.length === 0) return;
-
-        try {
-            for (const item of this.items) {
-                if (!item.cartId) {
-                    const { data, error } = await supabaseClient
-                        .from('cart')
-                        .insert({
-                            user_id: auth.getCurrentUser().id,
-                            product_id: item.productId,
-                            quantity: item.quantity
-                        })
-                        .select()
-                        .single();
-
-                    if (!error) {
-                        item.cartId = data.id;
-                    }
-                }
-            }
-            this.saveCartToLocalStorage();
-        } catch (error) {
-            console.error('Erro ao migrar carrinho:', error);
-        }
+    // Método para ser chamado pelo product.js
+    async addProduct(product) {
+        return await this.addItem(product);
     }
 }
 
-// Instância global do carrinho
-const cart = new Cart();
-
-// Escutar mudanças no estado de autenticação para migrar carrinho
-if (typeof auth !== 'undefined') {
-    // Aguardar o auth estar pronto
-    const checkAuth = setInterval(() => {
-        if (auth.currentUser !== undefined) {
-            clearInterval(checkAuth);
-            
-            // Migrar carrinho quando usuário fizer login
-            supabaseClient.auth.onAuthStateChange(async (event, session) => {
-                if (event === 'SIGNED_IN') {
-                    await cart.migrateLocalCartToDatabase();
-                    await cart.loadCartFromDatabase();
-                    cart.updateCartUI();
-                }
-            });
-        }
-    }, 100);
-}
-
-// Exportar para uso global
-window.cart = cart;
+// Inicializar carrinho quando a página carregar
+let cart;
+document.addEventListener('DOMContentLoaded', async function() {
+    // Aguardar o auth estar pronto se existir
+    if (typeof auth !== 'undefined' && auth.loadUser) {
+        await auth.loadUser();
+    }
+    cart = new Cart();
+});
 
