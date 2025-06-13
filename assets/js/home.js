@@ -57,15 +57,8 @@ async function loadProducts() {
 }
 
 function renderProducts(products) {
-    const productLists = document.querySelectorAll(".product-list .products-area");
-    
-    if (productLists.length < 2) {
-        console.error("Não foi possível encontrar as seções de produtos");
-        return;
-    }
-
-    const productsAreaMostViewed = productLists[0];
-    const productsAreaBestSellers = productLists[1];
+    const productsAreaMostViewed = document.querySelector(".product-list:nth-of-type(1) .products-area");
+    const productsAreaBestSellers = document.querySelector(".product-list:nth-of-type(2) .products-area");
 
     productsAreaMostViewed.innerHTML = "";
     productsAreaBestSellers.innerHTML = "";
@@ -84,7 +77,12 @@ function renderProducts(products) {
         return;
     }
 
-    products.forEach(product => {
+    // Limitar a 4 produtos para cada seção
+    const mostViewedProducts = products.slice(0, 4);
+    const bestSellerProducts = products.slice(0, 4); // Poderia ser uma ordenação diferente se tivesse dados de vendas
+
+    // Renderizar produtos mais vistos (limitado a 4)
+    mostViewedProducts.forEach(product => {
         const productItem = `
             <div class="product-item">
                 <a href="product.html?id=${product.id}">
@@ -101,10 +99,30 @@ function renderProducts(products) {
             </div>
         `;
         productsAreaMostViewed.innerHTML += productItem;
+    });
+    
+    // Renderizar produtos mais vendidos (limitado a 4)
+    bestSellerProducts.forEach(product => {
+        const productItem = `
+            <div class="product-item">
+                <a href="product.html?id=${product.id}">
+                    <div class="product-photo">
+                        <img src="${product.image_url || 'assets/images/products/default.png'}" alt="${product.name}" />
+                    </div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">R$ ${product.price.toFixed(2).replace('.', ',')}</div>
+                    <div class="product-info">Pagamento via PIX</div>
+                </a>
+                <div class="product-fav">
+                    <img src="assets/images/ui/heart-3-line.png" alt="" />
+                </div>
+            </div>
+        `;
         productsAreaBestSellers.innerHTML += productItem;
     });
 }
 
-
 // Inicializar carregamento de produtos quando a página carregar
 document.addEventListener("DOMContentLoaded", loadProducts);
+
+
