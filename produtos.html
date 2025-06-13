@@ -165,126 +165,9 @@
                 </div>
 
             </div>
-            <div class="grid">
-
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-                <div class="product-item">
-                    <a href="product.html">
-                        <div class="product-photo">
-                            <img src="assets/images/products/camiseta-css.png" alt="" />
-                        </div>
-                        <div class="product-name">Camisa CSS - Azul</div>
-                        <div class="product-price">R$ 59,90</div>
-                        <div class="product-info">Pagamento via PIX</div>
-                    </a>
-                    <div class="product-fav">
-                        <img src="assets/images/ui/heart-3-line.png" alt="" />
-                    </div>
-                </div>
-
+            <div class="grid" id="products-grid">
+                <!-- Os produtos serão carregados dinamicamente do Supabase -->
+                <div id="loading-products">Carregando produtos...</div>
             </div>
         </section>
 
@@ -361,8 +244,12 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script type="text/javascript" src="assets/js/supabase.js"></script>
     <script type="text/javascript" src="assets/js/header.js"></script>
     <script type="text/javascript" src="assets/js/footer.js"></script>
+    <script type="text/javascript" src="assets/js/auth.js"></script>
+    <script type="text/javascript" src="assets/js/cart.js"></script>
     <script type="text/javascript" src="assets/js/produtos.js"></script>
 </body>
 
