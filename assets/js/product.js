@@ -8,10 +8,10 @@ class ProductPage {
     async init() {
         // Obter ID do produto da URL
         const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get('id');
+        const productId = urlParams.get("id");
 
         if (!productId) {
-            this.showError('Produto não encontrado');
+            this.showError("Produto não encontrado");
             return;
         }
 
@@ -25,19 +25,19 @@ class ProductPage {
     async loadProduct(productId) {
         try {
             const { data, error } = await supabaseClient
-                .from('products')
-                .select('*')
-                .eq('id', productId)
+                .from("products")
+                .select("*")
+                .eq("id", productId)
                 .single();
 
             if (error) {
-                console.error('Erro ao carregar produto:', error);
-                this.showError('Erro ao carregar produto');
+                console.error("Erro ao carregar produto:", error);
+                this.showError("Erro ao carregar produto");
                 return;
             }
 
             if (!data) {
-                this.showError('Produto não encontrado');
+                this.showError("Produto não encontrado");
                 return;
             }
 
@@ -45,41 +45,41 @@ class ProductPage {
             this.renderProduct(data);
 
         } catch (error) {
-            console.error('Erro ao carregar produto:', error);
-            this.showError('Erro ao carregar produto');
+            console.error("Erro ao carregar produto:", error);
+            this.showError("Erro ao carregar produto");
         }
     }
 
     renderProduct(product) {
         // Atualizar imagem do produto
-        const productImage = document.querySelector('.photo img');
+        const productImage = document.querySelector(".photo img");
         if (productImage) {
-            productImage.src = product.image_url || 'assets/images/products/default.png';
+            productImage.src = product.image_url || "assets/images/products/default.png";
             productImage.alt = product.name;
         }
 
         // Atualizar nome do produto
-        const productName = document.querySelector('.info .name');
+        const productName = document.querySelector(".info .name");
         if (productName) {
             productName.textContent = product.name;
         }
 
         // Atualizar preço
-        const priceElement = document.querySelector('.info .price-to');
+        const priceElement = document.querySelector(".info .price-to");
         if (priceElement) {
-            priceElement.textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+            priceElement.textContent = `R$ ${product.price.toFixed(2).replace(".", ",")}`;
         }
 
         // Atualizar descrição
-        const descriptionElement = document.querySelector('.desc-body');
+        const descriptionElement = document.querySelector(".desc-body");
         if (descriptionElement) {
-            descriptionElement.textContent = product.description || 'Descrição não disponível.';
+            descriptionElement.textContent = product.description || "Descrição não disponível.";
         }
 
         // Atualizar breadcrumb
-        const breadcrumb = document.querySelector('.breadcrumb');
+        const breadcrumb = document.querySelector(".breadcrumb");
         if (breadcrumb) {
-            breadcrumb.textContent = `Home > ${product.category || 'Produtos'} > ${product.name}`;
+            breadcrumb.textContent = `Home > ${product.category || "Produtos"} > ${product.name}`;
         }
 
         // Atualizar título da página
@@ -88,15 +88,15 @@ class ProductPage {
 
     setupEvents() {
         // Evento para adicionar ao carrinho
-        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        const addToCartBtn = document.getElementById("add-to-cart-btn");
         if (addToCartBtn) {
-            addToCartBtn.addEventListener('click', () => {
+            addToCartBtn.addEventListener("click", () => {
                 this.addToCart();
             });
         }
 
         // Evento para adicionar aos favoritos
-        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*="heart-3-line.png"]");
+        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*=\"heart-3-line.png\"]");
         if (favoriteBtn && this.currentProduct) {
             const favoriteContainer = favoriteBtn.parentElement;
             
@@ -125,7 +125,7 @@ class ProductPage {
     }
 
     async updateFavoriteButton() {
-        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*="heart-3-line.png"]");
+        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*=\"heart-3-line.png\"]");
         if (favoriteBtn && this.currentProduct) {
             const isFavorite = await checkIfFavorite(this.currentProduct.id);
             const favoriteContainer = favoriteBtn.parentElement;
@@ -141,7 +141,7 @@ class ProductPage {
     async toggleFavorite() {
         if (!this.currentProduct) return;
         
-        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*="heart-3-line.png"]");
+        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*=\"heart-3-line.png\"]");
         const favoriteContainer = favoriteBtn.parentElement;
         
         try {
@@ -171,7 +171,7 @@ class ProductPage {
 
     async addToCart() {
         if (!this.currentProduct) {
-            this.showMessage('Produto não encontrado', 'error');
+            this.showMessage("Produto não encontrado", "error");
             return;
         }
 
@@ -180,41 +180,41 @@ class ProductPage {
             if (!auth.isLoggedIn()) {
                 // Para usuários não logados, usar localStorage
                 this.addToLocalCart();
-                this.showMessage('Produto adicionado ao carrinho!', 'success');
+                this.showMessage("Produto adicionado ao carrinho!", "success");
                 this.updateCartCounter();
                 return;
             }
 
             // Para usuários logados, salvar no banco de dados
             const { data: existingItem, error: selectError } = await supabaseClient
-                .from('cart')
-                .select('*')
-                .eq('user_id', auth.currentUser.id)
-                .eq('product_id', this.currentProduct.id)
+                .from("cart")
+                .select("*")
+                .eq("user_id", auth.currentUser.id)
+                .eq("product_id", this.currentProduct.id)
                 .single();
 
-            if (selectError && selectError.code !== 'PGRST116') {
-                console.error('Erro ao verificar carrinho:', selectError);
-                this.showMessage('Erro ao adicionar produto ao carrinho', 'error');
+            if (selectError && selectError.code !== "PGRST116") {
+                console.error("Erro ao verificar carrinho:", selectError);
+                this.showMessage("Erro ao adicionar produto ao carrinho", "error");
                 return;
             }
 
             if (existingItem) {
                 // Produto já existe no carrinho, incrementar quantidade
                 const { error: updateError } = await supabaseClient
-                    .from('cart')
+                    .from("cart")
                     .update({ quantity: existingItem.quantity + 1 })
-                    .eq('id', existingItem.id);
+                    .eq("id", existingItem.id);
 
                 if (updateError) {
-                    console.error('Erro ao atualizar carrinho:', updateError);
-                    this.showMessage('Erro ao adicionar produto ao carrinho', 'error');
+                    console.error("Erro ao atualizar carrinho:", updateError);
+                    this.showMessage("Erro ao adicionar produto ao carrinho", "error");
                     return;
                 }
             } else {
                 // Produto não existe no carrinho, adicionar novo
                 const { error: insertError } = await supabaseClient
-                    .from('cart')
+                    .from("cart")
                     .insert({
                         user_id: auth.currentUser.id,
                         product_id: this.currentProduct.id,
@@ -222,24 +222,24 @@ class ProductPage {
                     });
 
                 if (insertError) {
-                    console.error('Erro ao adicionar ao carrinho:', insertError);
-                    this.showMessage('Erro ao adicionar produto ao carrinho', 'error');
+                    console.error("Erro ao adicionar ao carrinho:", insertError);
+                    this.showMessage("Erro ao adicionar produto ao carrinho", "error");
                     return;
                 }
             }
 
-            this.showMessage('Produto adicionado ao carrinho!', 'success');
+            this.showMessage("Produto adicionado ao carrinho!", "success");
             this.updateCartCounter();
 
         } catch (error) {
-            console.error('Erro ao adicionar ao carrinho:', error);
-            this.showMessage('Erro ao adicionar produto ao carrinho', 'error');
+            console.error("Erro ao adicionar ao carrinho:", error);
+            this.showMessage("Erro ao adicionar produto ao carrinho", "error");
         }
     }
 
     addToLocalCart() {
         // Para usuários não logados, usar localStorage
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let cart = JSON.parse(localStorage.getItem("cart") || "[]");
         
         const existingItemIndex = cart.findIndex(item => item.id === this.currentProduct.id);
         
@@ -255,19 +255,19 @@ class ProductPage {
             });
         }
         
-        localStorage.setItem('cart', JSON.stringify(cart));
+        localStorage.setItem("cart", JSON.stringify(cart));
     }
 
     updateCartCounter() {
         // Atualizar contador do carrinho no header
-        if (typeof updateCartCounter === 'function') {
+        if (typeof updateCartCounter === "function") {
             updateCartCounter();
         }
     }
 
-    showMessage(message, type = 'info') {
+    showMessage(message, type = "info") {
         // Criar elemento de mensagem
-        const messageDiv = document.createElement('div');
+        const messageDiv = document.createElement("div");
         messageDiv.className = `message message-${type}`;
         messageDiv.textContent = message;
         messageDiv.style.cssText = `
@@ -279,7 +279,7 @@ class ProductPage {
             color: white;
             font-weight: bold;
             z-index: 1000;
-            ${type === 'success' ? 'background-color: #4CAF50;' : 'background-color: #f44336;'}
+            ${type === "success" ? "background-color: #4CAF50;" : "background-color: #f44336;"}
         `;
 
         document.body.appendChild(messageDiv);
@@ -294,15 +294,16 @@ class ProductPage {
 
     showError(message) {
         // Redirecionar para página inicial em caso de erro
-        this.showMessage(message, 'error');
+        this.showMessage(message, "error");
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = "index.html";
         }, 2000);
     }
 }
 
 // Inicializar quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function() {
     new ProductPage();
 });
+
 
