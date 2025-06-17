@@ -166,7 +166,8 @@ class ProductPage {
         } catch (error) {
             console.error("Erro ao alternar favorito:", error);
             this.showMessage("Erro ao processar favorito", "error");
-        }    }
+        } 
+    }
 
     async addToCart() {
         if (!this.currentProduct) {
