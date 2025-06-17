@@ -12,7 +12,58 @@ let filteredProducts = [];
 document.addEventListener("DOMContentLoaded", async () => {
     await loadProducts();
     setupEventListeners();
+    
+    // Aplicar filtro de categoria da URL, se existir
+    applyUrlCategoryFilter();
 });
+
+// Obter parâmetros da URL
+function getUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        categoria: params.get('categoria')
+    };
+}
+
+// Aplicar filtro de categoria da URL
+function applyUrlCategoryFilter() {
+    const { categoria } = getUrlParams();
+    
+    if (categoria) {
+        // Atualizar breadcrumb com a categoria atual
+        updateBreadcrumb(categoria);
+        
+        // Filtrar produtos pela categoria
+        filterByCategory(categoria);
+    }
+}
+
+// Atualizar breadcrumb com a categoria atual
+function updateBreadcrumb(categoria) {
+    const breadcrumb = document.querySelector('.breadcrumb');
+    if (breadcrumb) {
+        const categoryNames = {
+            'camisetas': 'Camisetas',
+            'kits': 'Kits B7Web',
+            'acessorios': 'Acessórios',
+            'eletronicos': 'Eletrônicos'
+        };
+        
+        breadcrumb.innerHTML = `Home > ${categoryNames[categoria] || 'Produtos'}`;
+    }
+}
+
+// Filtrar produtos por categoria
+function filterByCategory(categoria) {
+    if (!categoria) {
+        filteredProducts = [...products];
+    } else {
+        filteredProducts = products.filter(product => product.category === categoria);
+    }
+    
+    updateProductCount();
+    renderProducts();
+}
 
 // Carregar produtos do Supabase
 async function loadProducts() {
