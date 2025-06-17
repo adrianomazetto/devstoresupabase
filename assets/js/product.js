@@ -96,7 +96,7 @@ class ProductPage {
         }
 
         // Evento para adicionar aos favoritos
-        const favoriteBtn = document.querySelector('.buttons .btn-icon img[src*="heart-3-line.png"]');
+        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*="heart-3-line.png"]");
         if (favoriteBtn && this.currentProduct) {
             const favoriteContainer = favoriteBtn.parentElement;
             
@@ -104,21 +104,36 @@ class ProductPage {
             this.updateFavoriteButton();
             
             // Adicionar evento de clique
-            favoriteContainer.addEventListener('click', async () => {
+            favoriteContainer.addEventListener("click", async () => {
                 await this.toggleFavorite();
             });
         }
 
+        // Evento para área de descrição (manter funcionalidade existente)
+        const descButton = document.querySelector(".desc-header .btn-icon");
+        const descBody = document.querySelector(".desc-body");
+        
+        if (descButton && descBody) {
+            descButton.addEventListener("click", () => {
+                if (descBody.style.display === "none") {
+                    descBody.style.display = "block";
+                } else {
+                    descBody.style.display = "none";
+                }
+            });
+        }
+    }
+
     async updateFavoriteButton() {
-        const favoriteBtn = document.querySelector('.buttons .btn-icon img[src*="heart-3-line.png"]');
+        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*="heart-3-line.png"]");
         if (favoriteBtn && this.currentProduct) {
             const isFavorite = await checkIfFavorite(this.currentProduct.id);
             const favoriteContainer = favoriteBtn.parentElement;
             
             if (isFavorite) {
-                favoriteContainer.classList.add('favorite');
+                favoriteContainer.classList.add("favorite");
             } else {
-                favoriteContainer.classList.remove('favorite');
+                favoriteContainer.classList.remove("favorite");
             }
         }
     }
@@ -126,48 +141,32 @@ class ProductPage {
     async toggleFavorite() {
         if (!this.currentProduct) return;
         
-        const favoriteBtn = document.querySelector('.buttons .btn-icon img[src*="heart-3-line.png"]');
+        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*="heart-3-line.png"]");
         const favoriteContainer = favoriteBtn.parentElement;
         
         try {
             const result = await toggleFavorite(this.currentProduct.id, favoriteContainer);
             
             if (result.success) {
-                this.showMessage(result.message, 'success');
+                this.showMessage(result.message, "success");
                 
                 // Adicionar classe de animação
-                favoriteContainer.classList.add('pulse');
+                favoriteContainer.classList.add("pulse");
                 setTimeout(() => {
-                    favoriteContainer.classList.remove('pulse');
+                    favoriteContainer.classList.remove("pulse");
                 }, 500);
             } else {
-                this.showMessage(result.message, 'error');
+                this.showMessage(result.message, "error");
                 if (result.redirectToLogin) {
                     setTimeout(() => {
-                        window.location.href = 'login.html';
+                        window.location.href = "login.html";
                     }, 2000);
                 }
             }
         } catch (error) {
-            console.error('Erro ao alternar favorito:', error);
-            this.showMessage('Erro ao processar favorito', 'error');
-        }
-    }
-
-        // Evento para área de descrição (manter funcionalidade existente)
-        const descButton = document.querySelector('.desc-header .btn-icon');
-        const descBody = document.querySelector('.desc-body');
-        
-        if (descButton && descBody) {
-            descButton.addEventListener('click', () => {
-                if (descBody.style.display === 'none') {
-                    descBody.style.display = 'block';
-                } else {
-                    descBody.style.display = 'none';
-                }
-            });
-        }
-    }
+            console.error("Erro ao alternar favorito:", error);
+            this.showMessage("Erro ao processar favorito", "error");
+        }    }
 
     async addToCart() {
         if (!this.currentProduct) {
