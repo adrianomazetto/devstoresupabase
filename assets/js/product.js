@@ -96,7 +96,7 @@ class ProductPage {
         }
 
         // Evento para adicionar aos favoritos
-        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*=\"heart-3-line.png\"]");
+        const favoriteBtn = document.querySelector(`.buttons .btn-icon img[src*="heart-3-line.png"]`);
         if (favoriteBtn && this.currentProduct) {
             const favoriteContainer = favoriteBtn.parentElement;
             
@@ -125,7 +125,7 @@ class ProductPage {
     }
 
     async updateFavoriteButton() {
-        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*=\"heart-3-line.png\"]");
+        const favoriteBtn = document.querySelector(`.buttons .btn-icon img[src*="heart-3-line.png"]`);
         if (favoriteBtn && this.currentProduct) {
             const isFavorite = await checkIfFavorite(this.currentProduct.id);
             const favoriteContainer = favoriteBtn.parentElement;
@@ -141,7 +141,7 @@ class ProductPage {
     async toggleFavorite() {
         if (!this.currentProduct) return;
         
-        const favoriteBtn = document.querySelector(".buttons .btn-icon img[src*=\"heart-3-line.png\"]");
+        const favoriteBtn = document.querySelector(`.buttons .btn-icon img[src*="heart-3-line.png"]`);
         const favoriteContainer = favoriteBtn.parentElement;
         
         try {
