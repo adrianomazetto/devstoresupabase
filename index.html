@@ -217,6 +217,22 @@
     <script type="text/javascript" src="assets/js/footer.js"></script>
     <script type="text/javascript" src="assets/js/home.js"></script>
     <script type="text/javascript" src="assets/js/auth.js"></script>
+    <script type="text/javascript">
+        // Adicionar evento de pesquisa ao campo de busca na página inicial
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInputs = document.querySelectorAll('.search');
+            searchInputs.forEach(input => {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const searchTerm = input.value.trim();
+                        if (searchTerm) {
+                            window.location.href = `produtos.html?busca=${encodeURIComponent(searchTerm)}`;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

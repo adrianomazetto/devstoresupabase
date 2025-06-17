@@ -21,20 +21,51 @@ document.addEventListener("DOMContentLoaded", async () => {
 function getUrlParams() {
     const params = new URLSearchParams(window.location.search);
     return {
-        categoria: params.get('categoria')
+        categoria: params.get('categoria'),
+        busca: params.get('busca')
     };
 }
 
 // Aplicar filtro de categoria da URL
 function applyUrlCategoryFilter() {
-    const { categoria } = getUrlParams();
+    const { categoria, busca } = getUrlParams();
     
-    if (categoria) {
+    if (busca) {
+        // Se houver um termo de busca, priorizar a busca
+        filterBySearchTerm(busca);
+        updateBreadcrumbForSearch(busca);
+    } else if (categoria) {
         // Atualizar breadcrumb com a categoria atual
         updateBreadcrumb(categoria);
         
         // Filtrar produtos pela categoria
         filterByCategory(categoria);
+    }
+}
+
+// Filtrar produtos por termo de busca
+function filterBySearchTerm(searchTerm) {
+    if (!searchTerm) {
+        filteredProducts = [...products];
+    } else {
+        // Converter para minúsculas para busca case-insensitive
+        const term = searchTerm.toLowerCase();
+        
+        filteredProducts = products.filter(product => 
+            product.name.toLowerCase().includes(term) || 
+            (product.description && product.description.toLowerCase().includes(term))
+        );
+    }
+    
+    updateProductCount();
+    renderProducts();
+}
+
+// Atualizar breadcrumb para resultados de busca
+function updateBreadcrumbForSearch(searchTerm) {
+    const breadcrumb = document.querySelector('.breadcrumb');
+    if (breadcrumb) {
+        breadcrumb.innerHTML = `Home > Resultados para "${searchTerm}"`;
     }
 }
 
@@ -178,6 +209,45 @@ function setupEventListeners() {
         checkbox.addEventListener('change', () => {
             applyFilters();
         });
+    });
+    
+    // Campo de pesquisa no header
+    const searchInputs = document.querySelectorAll('.search');
+    searchInputs.forEach(input => {
+        // Evento para pesquisar ao pressionar Enter
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const searchTerm = input.value.trim();
+                filterBySearchTerm(searchTerm);
+                
+                // Se estiver na página inicial, redirecionar para a página de produtos com o termo de busca
+                if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
+                    window.location.href = `produtos.html?busca=${encodeURIComponent(searchTerm)}`;
+                    return;
+                }
+                
+                // Atualizar URL com o termo de busca sem recarregar a página
+                const url = new URL(window.location.href);
+                url.searchParams.set('busca', searchTerm);
+                window.history.pushState({}, '', url);
+                
+                // Atualizar breadcrumb
+                updateBreadcrumbForSearch(searchTerm);
+            }
+        });
+        
+        // Opcional: Pesquisa em tempo real (descomente se desejar)
+        /*
+        input.addEventListener('input', () => {
+            const searchTerm = input.value.trim();
+            if (searchTerm.length >= 3) { // Pesquisar apenas se tiver pelo menos 3 caracteres
+                filterBySearchTerm(searchTerm);
+            } else if (searchTerm.length === 0) {
+                // Se o campo estiver vazio, mostrar todos os produtos (ou aplicar filtros existentes)
+                applyUrlCategoryFilter();
+            }
+        });
+        */
     });
 }
 
