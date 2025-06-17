@@ -80,7 +80,7 @@ async function loadProducts() {
     }
 }
 
-function renderProducts(products) {
+async function renderProducts(products) {
     console.log("Iniciando renderização de produtos...");
     
     // Selecionar todas as áreas de produtos
@@ -137,13 +137,18 @@ function renderProducts(products) {
 
     // Renderizar produtos mais vistos (limitado a 4)
     console.log("Renderizando produtos mais vistos...");
-    mostViewedProducts.forEach((product, index) => {
+    for (let index = 0; index < mostViewedProducts.length; index++) {
+        const product = mostViewedProducts[index];
         console.log(`Renderizando produto mais visto #${index + 1}:`, product);
         try {
             if (!product || !product.id || !product.name || product.price === undefined) {
                 console.error(`Produto inválido #${index}:`, product);
-                return;
+                continue;
             }
+            
+            // Verificar se o produto está nos favoritos
+            const isFavorite = await checkIfFavorite(product.id);
+            const heartClass = isFavorite ? 'favorite' : '';
             
             const productItem = `
                 <div class="product-item">
@@ -155,7 +160,7 @@ function renderProducts(products) {
                         <div class="product-price">R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')}</div>
                         <div class="product-info">Pagamento via PIX</div>
                     </a>
-                    <div class="product-fav">
+                    <div class="product-fav ${heartClass}" onclick="toggleFavorite('${product.id}', this)">
                         <img src="assets/images/ui/heart-3-line.png" alt="" />
                     </div>
                 </div>
@@ -165,17 +170,22 @@ function renderProducts(products) {
         } catch (err) {
             console.error(`Erro ao renderizar produto mais visto #${index}:`, err);
         }
-    });
+    }
     
     // Renderizar produtos mais vendidos (limitado a 4)
     console.log("Renderizando produtos mais vendidos...");
-    bestSellerProducts.forEach((product, index) => {
+    for (let index = 0; index < bestSellerProducts.length; index++) {
+        const product = bestSellerProducts[index];
         console.log(`Renderizando produto mais vendido #${index + 1}:`, product);
         try {
             if (!product || !product.id || !product.name || product.price === undefined) {
                 console.error(`Produto inválido #${index}:`, product);
-                return;
+                continue;
             }
+            
+            // Verificar se o produto está nos favoritos
+            const isFavorite = await checkIfFavorite(product.id);
+            const heartClass = isFavorite ? 'favorite' : '';
             
             const productItem = `
                 <div class="product-item">
@@ -187,7 +197,7 @@ function renderProducts(products) {
                         <div class="product-price">R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')}</div>
                         <div class="product-info">Pagamento via PIX</div>
                     </a>
-                    <div class="product-fav">
+                    <div class="product-fav ${heartClass}" onclick="toggleFavorite('${product.id}', this)">
                         <img src="assets/images/ui/heart-3-line.png" alt="" />
                     </div>
                 </div>
@@ -197,10 +207,9 @@ function renderProducts(products) {
         } catch (err) {
             console.error(`Erro ao renderizar produto mais vendido #${index}:`, err);
         }
-    });
+    }
 }
 
 // Inicializar carregamento de produtos quando a página carregar
 document.addEventListener("DOMContentLoaded", loadProducts);
-
 
