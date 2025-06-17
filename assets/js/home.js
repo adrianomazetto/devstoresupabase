@@ -119,10 +119,18 @@ function renderProducts(products) {
         return;
     }
 
-    // Limitar a 4 produtos para cada seção
-    console.log("Limitando a 4 produtos por seção...");
-    const mostViewedProducts = products.slice(0, 4);
-    const bestSellerProducts = products.slice(0, 4); // Poderia ser uma ordenação diferente se tivesse dados de vendas
+    // Limitar a 4 produtos para cada seção com diferenciação
+    console.log("Limitando a 4 produtos por seção com diferenciação...");
+    
+    // Para produtos mais vistos: ordenar por nome (ordem alfabética)
+    const mostViewedProducts = [...products]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .slice(0, 4);
+    
+    // Para produtos mais vendidos: ordenar por preço (do menor para o maior)
+    const bestSellerProducts = [...products]
+        .sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
+        .slice(0, 4);
     
     console.log("Produtos mais vistos:", mostViewedProducts);
     console.log("Produtos mais vendidos:", bestSellerProducts);
