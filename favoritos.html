@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Favoritos - B7Store</title>
+    <link rel="stylesheet" href="assets/css/global.css" />
+    <link rel="stylesheet" href="assets/css/header.css" />
+    <link rel="stylesheet" href="assets/css/newsletter.css" />
+    <link rel="stylesheet" href="assets/css/footer.css" />
+    <link rel="stylesheet" href="assets/css/products.css" />
+    <style>
+        .favorites-title {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .favorites-title h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .favorites-title p {
+            color: #666;
+        }
+        
+        .no-favorites {
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .no-favorites h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        
+        .no-favorites p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .no-favorites .button {
+            display: inline-block;
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="header-warning">
+        <div class="mobile"><span>FRETE GRÁTIS</span> para todo o Nordeste!</div>
+        <div class="desktop"><span>FRETE GRÁTIS</span> para todo o Nordeste nas compras acima de R$ 199,00.
+            <span>APROVEITA!</span>
+        </div>
+    </section>
+    <header>
+        <div class="header-main">
+            <div class="header-left">
+                <a class="logo" href="index.html">
+                    <img src="assets/images/ui/logo-black.png" alt="B7Store" />
+                </a>
+                <ul>
+                    <li><a href="produtos.html?categoria=camisetas">Camisetas</a></li>
+                    <li><a href="produtos.html?categoria=kits">Kits B7Web</a></li>
+                    <li><a href="produtos.html?categoria=acessorios">Acessórios</a></li>
+                    <li><a href="produtos.html?categoria=eletronicos">Eletrônicos</a></li>
+                </ul>
+            </div>
+            <div class="header-right">
+                <input class="search" type="text" placeholder="Pesquisa" />
+                <a href="login.html" class="btn-icon">
+                    <img src="assets/images/ui/user-line.png" alt="" />
+                </a>
+                <a href="checkout.html" class="btn-icon">
+                    <img src="assets/images/ui/shopping-bag-4-line.png" alt="" />
+                </a>
+                <a class="btn-icon menu-burger">
+                    <img class="off" src="assets/images/ui/menu-line.png" alt="" />
+                    <img class="on" src="assets/images/ui/menu-line-white.png" alt="" />
+                </a>
+            </div>
+        </div>
+        <div class="header-menu">
+            <a href="produtos.html?categoria=camisetas">Camisetas</a>
+            <a href="produtos.html?categoria=kits">Kits B7Web</a>
+            <a href="produtos.html?categoria=acessorios">Acessórios</a>
+            <a href="produtos.html?categoria=eletronicos">Eletrônicos</a>
+        </div>
+        <div class="header-search">
+            <input class="search" type="text" placeholder="O que você procura?" />
+        </div>
+    </header>
+    <main>
+        <div class="breadcrumb">Home > Meus Favoritos</div>
+
+        <div class="favorites-title">
+            <h1>Meus Favoritos</h1>
+            <p>Produtos que você marcou como favoritos</p>
+        </div>
+
+        <section class="products">
+            <div class="products-grid" id="favorites-grid">
+                <div class="loading">Carregando favoritos...</div>
+            </div>
+        </section>
+    </main>
+    <section class="newsletter">
+        <div class="news-area">
+            <div class="news-left">
+                <img src="assets/images/ui/mail-send-line.png" alt="" />
+                <div>
+                    <h3>Fique por dentro das promoções!</h3>
+                    <p>Coloque seu e-mail e seja o primeiro a saber</p>
+                </div>
+            </div>
+            <div class="news-right">
+                <input class="input" type="text" placeholder="Qual seu e-mail?" />
+                <button class="button">Enviar</button>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="footer-menu">
+            <a class="logo" href="index.html">
+                <img src="assets/images/ui/logo-white.png" alt="B7Store" />
+            </a>
+            <ul>
+                <li><a href="produtos.html?categoria=camisetas">Camisetas</a></li>
+                <li><a href="produtos.html?categoria=kits">Kits B7Web</a></li>
+                <li><a href="produtos.html?categoria=acessorios">Acessórios</a></li>
+                <li><a href="produtos.html?categoria=eletronicos">Eletrônicos</a></li>
+            </ul>
+        </div>
+        <div class="footer-contacts">
+            <div class="contacts">
+                <div class="footer-title">Precisa de ajuda?</div>
+                <div class="footer-icons">
+                    <a class="btn-icon-text" href="">
+                        <img src="assets/images/ui/mail-line.png" alt="" />
+                        <span>b7store@email.com</span>
+                    </a>
+                    <a class="btn-icon-text" href="">
+                        <img src="assets/images/ui/phone-line.png" alt="" />
+                        <span>(00) 00000-0000</span>
+                    </a>
+                </div>
+            </div>
+            <div class="social">
+                <div class="footer-title">Acompanhe nas redes sociais</div>
+                <div class="footer-icons">
+
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/instagram-line.png" alt="" />
+                    </a>
+
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/linkedin-line.png" alt="" />
+                    </a>
+
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/facebook-line.png" alt="" />
+                    </a>
+
+                    <a href="" class="btn-icon">
+                        <img src="assets/images/ui/twitter-x-fill.png" alt="" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="phrase">Se você leu isso aqui, saiba que está no caminho certo!<br />Continue estudando e você
+                chegará lá...</div>
+            <div class="btn-icon">
+                <img src="assets/images/ui/arrow-up-line.png" alt="" />
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script type="text/javascript" src="assets/js/supabase.js"></script>
+    <script type="text/javascript" src="assets/js/header.js"></script>
+    <script type="text/javascript" src="assets/js/footer.js"></script>
+    <script type="text/javascript" src="assets/js/auth.js"></script>
+    <script type="text/javascript" src="assets/js/favorites.js"></script>
+    <script type="text/javascript" src="assets/js/favorites-page.js"></script>
+</body>
+
+</html>
