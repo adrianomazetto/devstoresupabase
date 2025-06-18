@@ -44,7 +44,7 @@ function applyUrlCategoryFilter() {
 }
 
 // Filtrar produtos por termo de busca
-async function filterBySearchTerm(searchTerm) {
+function filterBySearchTerm(searchTerm) {
     if (!searchTerm) {
         filteredProducts = [...products];
     } else {
@@ -58,7 +58,7 @@ async function filterBySearchTerm(searchTerm) {
     }
     
     updateProductCount();
-    await renderProducts();
+    renderProducts();
 }
 
 // Atualizar breadcrumb para resultados de busca
@@ -85,7 +85,7 @@ function updateBreadcrumb(categoria) {
 }
 
 // Filtrar produtos por categoria
-async function filterByCategory(categoria) {
+function filterByCategory(categoria) {
     if (!categoria) {
         filteredProducts = [...products];
     } else {
@@ -93,7 +93,7 @@ async function filterByCategory(categoria) {
     }
     
     updateProductCount();
-    await renderProducts();
+    renderProducts();
 }
 
 // Carregar produtos do Supabase
@@ -117,7 +117,7 @@ async function loadProducts() {
         updateProductCount();
         
         // Renderizar produtos
-        await renderProducts();
+        renderProducts();
     } catch (error) {
         console.error("Erro ao carregar produtos:", error);
         loadingElement.textContent = "Erro ao carregar produtos. Tente novamente mais tarde.";
@@ -125,7 +125,7 @@ async function loadProducts() {
 }
 
 // Renderizar produtos na grid
-async function renderProducts() {
+function renderProducts() {
     // Limpar grid
     productsGrid.innerHTML = "";
     
@@ -140,11 +140,7 @@ async function renderProducts() {
     }
 
     // Renderizar cada produto
-    for (const product of filteredProducts) {
-        // Verificar se o produto está nos favoritos
-        const isFavorite = await checkIfFavorite(product.id);
-        const heartClass = isFavorite ? 'favorite' : '';
-        
+    filteredProducts.forEach(product => {
         const productItem = document.createElement('div');
         productItem.className = 'product-item';
         productItem.innerHTML = `
@@ -156,12 +152,12 @@ async function renderProducts() {
                 <div class="product-price">R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')}</div>
                 <div class="product-info">Pagamento via PIX</div>
             </a>
-            <div class="product-fav ${heartClass}" onclick="toggleFavorite('${product.id}', this)">
+            <div class="product-fav">
                 <img src="assets/images/ui/heart-3-line.png" alt="" />
             </div>
         `;
         productsGrid.appendChild(productItem);
-    }
+    });
 }
 
 // Atualizar contador de produtos
@@ -256,7 +252,7 @@ function setupEventListeners() {
 }
 
 // Ordenar produtos
-async function sortProducts(orderType) {
+function sortProducts(orderType) {
     switch (orderType) {
         case 'price':
             filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
@@ -270,16 +266,16 @@ async function sortProducts(orderType) {
             filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
             break;
     }
-    await renderProducts();
+    renderProducts();
 }
 
 // Aplicar filtros
-async function applyFilters() {
+function applyFilters() {
     // Aqui você implementaria a lógica de filtros baseada nos checkboxes selecionados
     // Por enquanto, vamos apenas manter todos os produtos
     filteredProducts = [...products];
     updateProductCount();
-    await renderProducts();
+    renderProducts();
 }
 
 // Exibir/ocultar áreas de ordenação e filtros

@@ -80,7 +80,7 @@ async function loadProducts() {
     }
 }
 
-async function renderProducts(products) {
+function renderProducts(products) {
     console.log("Iniciando renderização de produtos...");
     
     // Selecionar todas as áreas de produtos
@@ -119,36 +119,23 @@ async function renderProducts(products) {
         return;
     }
 
-    // Limitar a 4 produtos para cada seção com diferenciação
-    console.log("Limitando a 4 produtos por seção com diferenciação...");
-    
-    // Para produtos mais vistos: ordenar por nome (ordem alfabética)
-    const mostViewedProducts = [...products]
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .slice(0, 4);
-    
-    // Para produtos mais vendidos: ordenar por preço (do menor para o maior)
-    const bestSellerProducts = [...products]
-        .sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
-        .slice(0, 4);
+    // Limitar a 4 produtos para cada seção
+    console.log("Limitando a 4 produtos por seção...");
+    const mostViewedProducts = products.slice(0, 4);
+    const bestSellerProducts = products.slice(0, 4); // Poderia ser uma ordenação diferente se tivesse dados de vendas
     
     console.log("Produtos mais vistos:", mostViewedProducts);
     console.log("Produtos mais vendidos:", bestSellerProducts);
 
     // Renderizar produtos mais vistos (limitado a 4)
     console.log("Renderizando produtos mais vistos...");
-    for (let index = 0; index < mostViewedProducts.length; index++) {
-        const product = mostViewedProducts[index];
+    mostViewedProducts.forEach((product, index) => {
         console.log(`Renderizando produto mais visto #${index + 1}:`, product);
         try {
             if (!product || !product.id || !product.name || product.price === undefined) {
                 console.error(`Produto inválido #${index}:`, product);
-                continue;
+                return;
             }
-            
-            // Verificar se o produto está nos favoritos
-            const isFavorite = await checkIfFavorite(product.id);
-            const heartClass = isFavorite ? 'favorite' : '';
             
             const productItem = `
                 <div class="product-item">
@@ -160,7 +147,7 @@ async function renderProducts(products) {
                         <div class="product-price">R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')}</div>
                         <div class="product-info">Pagamento via PIX</div>
                     </a>
-                    <div class="product-fav ${heartClass}" onclick="toggleFavorite('${product.id}', this)">
+                    <div class="product-fav">
                         <img src="assets/images/ui/heart-3-line.png" alt="" />
                     </div>
                 </div>
@@ -170,22 +157,17 @@ async function renderProducts(products) {
         } catch (err) {
             console.error(`Erro ao renderizar produto mais visto #${index}:`, err);
         }
-    }
+    });
     
     // Renderizar produtos mais vendidos (limitado a 4)
     console.log("Renderizando produtos mais vendidos...");
-    for (let index = 0; index < bestSellerProducts.length; index++) {
-        const product = bestSellerProducts[index];
+    bestSellerProducts.forEach((product, index) => {
         console.log(`Renderizando produto mais vendido #${index + 1}:`, product);
         try {
             if (!product || !product.id || !product.name || product.price === undefined) {
                 console.error(`Produto inválido #${index}:`, product);
-                continue;
+                return;
             }
-            
-            // Verificar se o produto está nos favoritos
-            const isFavorite = await checkIfFavorite(product.id);
-            const heartClass = isFavorite ? 'favorite' : '';
             
             const productItem = `
                 <div class="product-item">
@@ -197,7 +179,7 @@ async function renderProducts(products) {
                         <div class="product-price">R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')}</div>
                         <div class="product-info">Pagamento via PIX</div>
                     </a>
-                    <div class="product-fav ${heartClass}" onclick="toggleFavorite('${product.id}', this)">
+                    <div class="product-fav">
                         <img src="assets/images/ui/heart-3-line.png" alt="" />
                     </div>
                 </div>
@@ -207,9 +189,10 @@ async function renderProducts(products) {
         } catch (err) {
             console.error(`Erro ao renderizar produto mais vendido #${index}:`, err);
         }
-    }
+    });
 }
 
 // Inicializar carregamento de produtos quando a página carregar
 document.addEventListener("DOMContentLoaded", loadProducts);
+
 
